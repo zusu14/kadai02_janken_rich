@@ -136,9 +136,10 @@ $(document).ready(function () {
           // 正解判定
           if (option === correctTitle) {
             $("#message").text("正解です！");
+            correctCount++;
           } else {
             $("#message").text(
-              "残念、不正解！正解は「" + correctTitle + "」です"
+              "残念、不正解！ 正解は「" + correctTitle + "」です"
             );
           }
           // 回答ボタン全てを無効化
