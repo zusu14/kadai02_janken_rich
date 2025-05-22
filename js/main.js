@@ -2,34 +2,24 @@ $(document).ready(function () {
   // クイズデータ(JSON形式)
   const quizData = [
     {
-      question: "この曲のタイトルは？",
+      title: "穏やかな朝",
       audio: "./audio/穏やかな朝.mp3",
-      options: ["穏やかな朝", "2:23AM", "Morning"],
-      answer: "穏やかな朝",
     },
     {
-      question: "この曲のタイトルは？",
+      title: "2:23AM",
       audio: "./audio/2_23_AM.mp3",
-      options: ["穏やかな朝", "2:23AM", "Morning"],
-      answer: "2:23AM",
     },
     {
-      question: "この曲のタイトルは？",
+      title: "Morning",
       audio: "./audio/Morning.mp3",
-      options: ["穏やかな朝", "2:23AM", "Morning"],
-      answer: "Morning",
     },
     {
-      question: "この曲のタイトルは？",
+      title: "Scary Shaper",
       audio: "./audio/Scary_Shaper.mp3",
-      options: ["Scary Shaper", "2:23AM", "Morning"],
-      answer: "Scary Shaper",
     },
     {
-      question: "この曲のタイトルは？",
+      title: "君に花",
       audio: "./audio/君に花.mp3",
-      options: ["穏やかな朝", "君に花", "Morning"],
-      answer: "君に花",
     },
   ];
 
@@ -49,10 +39,8 @@ $(document).ready(function () {
     if (questionCount >= totalQuestions) return;
     console.log("click startButton");
 
-    // スタートボタンを無効化
-    $("#startButton").prop("disabled", true);
-
     // 表示を初期化
+    $("#startButton").prop("disabled", true);
     $("#countdown").show();
     $("#quizArea").empty();
     $("#message").empty();
@@ -90,7 +78,8 @@ $(document).ready(function () {
         return !usedIndexes.includes(i);
       });
     if (availableIndexes.length === 0) return;
-    // 乱数生成
+
+    // 使用可能なインデックスの中から、乱数生成
     currentQuestionIndex =
       availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
     usedIndexes.push(currentQuestionIndex);
@@ -112,26 +101,45 @@ $(document).ready(function () {
 
   // クイズ関数
   function showQuiz() {
-    const quiz = quizData[currentQuestionIndex];
+    // インデックスからクイズデータを取得
+    const correctTitle = quizData[currentQuestionIndex].title;
 
     // 問題文を表示
-    const questionElem = $("<h2>").text(quiz.question);
+    const questionElem = $("<h2>").text("この曲のタイトルは？");
     $("#quizArea").append(questionElem);
+
+    // 各要素のtitleプロパティを抽出して新しい配列を作成
+    const titles = quizData.map(function (q) {
+      return q.title;
+    });
+    // 正解のタイトル以外を抽出
+    let options = titles.filter(function (t) {
+      return t !== correctTitle;
+    });
+    // 誤回答を並び替え
+    shuffleArray(options);
+    // 2つを抽出
+    options = options.slice(0, 2);
+    // 正解のタイトルを追加
+    options.push(correctTitle);
+    // 最後に正解も含めて並び替え
+    shuffleArray(options);
 
     // 選択肢をボタンで表示
     // optionはforEachが渡す引数
-    quiz.options.forEach(function (option) {
+    options.forEach(function (option) {
       // 選択肢ボタンの設定
       const button = $("<button>")
         .text(option)
         .addClass("option-button")
         .click(function () {
           // 正解判定
-          if (option === quiz.answer) {
+          if (option === correctTitle) {
             $("#message").text("正解です！");
-            correctCount++;
           } else {
-            $("#message").text("不正解！正解は「" + quiz.answer + "」です");
+            $("#message").text(
+              "残念、不正解！正解は「" + correctTitle + "」です"
+            );
           }
           // 回答ボタン全てを無効化
           $(".option-button").prop("disabled", true);
@@ -176,4 +184,15 @@ $(document).ready(function () {
     // ページの再読み込み
     location.reload();
   });
+
+  // シャッフル関数（FisherーYates、よく使われるアルゴリズムらしい）
+  function shuffleArray(array) {
+    // 配列の末尾から先頭へ向けてループ（要素数-1）回
+    for (let i = array.length - 1; i > 0; i--) {
+      // 0以上i以下のランダムな整数jを生成
+      const j = Math.floor(Math.random() * (i + 1));
+      // 要素の入れ替え
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
 });
