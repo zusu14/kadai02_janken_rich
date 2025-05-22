@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>イントロクイズ</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <h1>イントロクイズ</h1>
+
+    <!-- スタートボタン -->
+    <button id="startButton">クイズを始める</button>
+
+    <!-- カウントダウン表示 -->
+    <div id="countdown"></div>
+
+    <!-- 音声再生用 -->
+    <audio src="" id="introAudio"></audio>
+
+    <!-- 問題と選択肢 -->
+    <div id="quizArea"></div>
+
+    <!-- メッセージ（結果） -->
+    <div id="message"></div>
+
+    <!-- もう一度遊ぶボタン -->
+    <button id="restartButton" style="display: none">もう一度遊ぶ</button>
+
+    <!-- jQuery読み込み -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
